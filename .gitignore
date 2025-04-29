@@ -4,3 +4,4 @@ archive
 tony_*
 tmp
 tmp*
+__pycache__
