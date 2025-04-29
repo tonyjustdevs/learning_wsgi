@@ -6,8 +6,12 @@ def wsgi_app_v1_echo(environ, start_response):
     
     # environ["wsgi.input"] = buffer (type: bytes_string)  its only echo only app 
     data_bytes = environ["wsgi.input"]  # since its already in byte form
-    
+    print(f"[internal] data_bytes: {data_bytes} inside wsgi_app_v1_echo() from file:{__file__} name:{__name__}")
     # version 1: just one single bytes string
     # version 2: data_bytes elements? like [b"first", b"second", "third"]
  
     return [data_bytes] # version 1
+    # Handling WSGI Lazy Execution
+    # - A parsed element directly (x_wsgiorg_parsed_response)
+    # - Or write to the writer (manual chunks)
+    # - Or yield strings from the iterator
