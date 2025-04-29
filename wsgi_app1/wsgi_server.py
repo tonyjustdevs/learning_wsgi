@@ -23,37 +23,39 @@ def simple_wsgi_server(simple_wsgi_app: callable):
         # ref: https://peps.python.org/pep-3333/#environ-variables
         environ = handle_request_v1_echo(client_socket) 
         
+        print(f"[internal]: {environ} from simple_wsgi_server()")
+        # {'wsgi.input': b"hello from tony's client\npsg-arsenal tonight lads!\nbye\n"} from simple_wsgi_server()
         def start_response(status, headers):
             # wsgi_app provides arguments: 'status' & 'headers' arguments 
             # e.g. status "200 OK" 
             # e.g. header [(Content-type,"text/plain")]
             # create dict from these arguments and whatever server response we want
-            # environ_dict
-            
-            # 
             # wsgi_app calls start_response(status, headers)
             # server send status and headers responses to client via socket?
             pass
         # req_v1: environ["wsgi.input"] = buffer
-        # 
         body_resp_iterable = wsgi_app_v1_echo(environ, start_response)
+        
         for body_byte in body_resp_iterable:
-            client_socket.sendall(body_byte) # server send body_response client via socket?
+            body_byte = body_byte+ b'\n'
+            client_socket.sendall(body_byte)
+
 
 def handle_request_v1_echo(conn) -> dict:
     '''for parsing non-http byte string from client_v1.py'''
     buffer = b""
+    print(f"handle_request_v1: building buffer until client disconnects...")
     while True:
         data_bytes = conn.recv(1024)
         if not data_bytes:
             break
-        print(f"[t] recived: {data_bytes}") #  b'hello from client\nIt'sTony'
-        buffer += data_bytes
-        print(f"current_buffet_bytes: {buffer}")
+        buffer += data_bytes # after each timeout, buffet appends more bytes
+        print(f"current_buffer: {buffer}")
     # gonna just add response to wsgi.input because this app is echoing only
     environ_dict = {}
-    environ_dict["wsgi.input"] = buffer 
+    environ_dict["wsgi.input"] = buffer
     return environ_dict
+
     # okay i think this is supposed to be used by data from POST but since this first version echos the
     # exact bytes then its fine for now...
     
