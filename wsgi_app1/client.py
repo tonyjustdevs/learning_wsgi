@@ -4,7 +4,7 @@ def tp_client():
     PORT = 12345
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
         client_socket.connect((HOST, PORT))
-        messages = ["hello from client", "quite a fine day", "bye"]
+        messages = ["hello from tony's client", "psg-arsenal tonight lads!", "bye"]
         for msg in messages:
             msg = msg+'\n'
             print(f"[t] sent {msg!r}")
@@ -14,7 +14,7 @@ def tp_client():
                 if not data_bytes_received:
                     break
                 
-                print(f"[t] message received: {data_bytes_received}")
+                print(f"[t] server replied: {data_bytes_received}")
                 if b'\n' in data_bytes_received:
                     break
 tp_client()
