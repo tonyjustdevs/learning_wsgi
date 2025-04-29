@@ -1,0 +1,6 @@
+.venv
+.env
+archive
+tony_*
+tmp
+tmp*
