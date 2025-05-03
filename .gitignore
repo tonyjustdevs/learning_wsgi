@@ -6,3 +6,5 @@ tony_*
 tmp
 tmp*
 __pycache__
+*png
+*jpg
